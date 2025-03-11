@@ -36,32 +36,54 @@ public class ClientController {
     private ClientService serviceShop;
 
     @PostMapping("/cadastro")
-    public ResponseEntity<?> cadastrarbarber(@RequestBody ClientEntity uiShop){
-        return serviceShop.registro(uiShop,"cadastro");
+    public ResponseEntity<?> cadastrarbarber(@RequestBody ClientEntity uiShop) {
+        try {
+            return serviceShop.registro(uiShop, "cadastro");
+        } catch (Exception e) {
+            // Log para rastrear possíveis erros
+            System.err.println("Erro ao cadastrar cliente: " + e.getMessage());
+            return ResponseEntity.badRequest().body("Erro ao cadastrar cliente.");
+        }
     }
 
     @PutMapping("{id}")
-    UpdateClientResponse updade(@PathVariable final Long id, @RequestBody @Valid final UpdateClientRequest request) {
+    public UpdateClientResponse update(@PathVariable final Long id, @RequestBody @Valid final UpdateClientRequest request) {
         var entity = mapper.toEntity(id, request);
-        service.update(entity);
-        return mapper.toUpdateResponse(entity);
+        var updatedEntity = service.update(entity);
+        return mapper.toUpdateResponse(updatedEntity);
     }
 
     @DeleteMapping("{id}")
     @ResponseStatus(NO_CONTENT)
-    void delete(@PathVariable final Long id) {
-        service.delete(id);
+    public void delete(@PathVariable final Long id) {
+        try {
+            service.delete(id);
+        } catch (Exception e) {
+            // Log para rastrear possíveis erros ao excluir
+            System.err.println("Erro ao excluir cliente: " + e.getMessage());
+        }
     }
 
     @GetMapping("{id}")
-    ClientDetailResponse findById(@PathVariable final Long id) {
-        var entity = queryService.findById(id);
-        return mapper.toDetailResponse(entity);
+    public ClientDetailResponse findById(@PathVariable final Long id) {
+        try {
+            var entity = queryService.findById(id);
+            return mapper.toDetailResponse(entity);
+        } catch (Exception e) {
+            // Log para rastrear possíveis erros ao buscar cliente
+            System.err.println("Erro ao buscar cliente por ID: " + e.getMessage());
+            throw new RuntimeException("Cliente não encontrado.");
+        }
     }
 
     @GetMapping("/listar")
-    public Iterable<ClientEntity> listar(){
-        return serviceShop.listar();
+    public Iterable<ClientEntity> listar() {
+        try {
+            return serviceShop.listar();
+        } catch (Exception e) {
+            // Log para rastrear possíveis erros ao listar clientes
+            System.err.println("Erro ao listar clientes: " + e.getMessage());
+            throw new RuntimeException("Erro ao listar clientes.");
+        }
     }
-
 }

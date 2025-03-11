@@ -1,40 +1,37 @@
 package barber_shop_ui.service.impl;
 
 import barber_shop_ui.entity.ClientEntity;
-import barber_shop_ui.entity.ModelCadastro;
 import barber_shop_ui.repository.IClientRepository;
 import barber_shop_ui.service.IClientService;
-import org.springframework.beans.factory.annotation.Autowired;
+import barber_shop_ui.service.query.IClientQueryService;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ClientService implements IClientService {  // Implementando a interface
+@AllArgsConstructor
+public class ClientService implements IClientService {
 
-    @Autowired
-    private IClientRepository clientRepository;
-
-    @Autowired
-    private ModelCadastro mensagem;
+    private final IClientRepository clientRepository;
+    private final IClientQueryService clientQueryService;
 
     @Override
     public ResponseEntity<?> registro(ClientEntity clienteCadastro, String barberError) {
+        // Lógica de validação já existente
         if (clienteCadastro.getName() == null || clienteCadastro.getName().isEmpty()) {
-            mensagem.setMessage("O nome precisa ser preenchido");
-            return ResponseEntity.badRequest().body(mensagem);
+            return ResponseEntity.badRequest().body("O nome precisa ser preenchido");
         }
 
         if (clienteCadastro.getEmail() == null || clienteCadastro.getEmail().isEmpty()) {
-            mensagem.setMessage("O email precisa ser preenchido");
-            return ResponseEntity.badRequest().body(mensagem);
+            return ResponseEntity.badRequest().body("O email precisa ser preenchido");
         }
 
         if (clienteCadastro.getPhone() == null || clienteCadastro.getPhone().isEmpty()) {
-            mensagem.setMessage("O telefone precisa ser preenchido");
-            return ResponseEntity.badRequest().body(mensagem);
+            return ResponseEntity.badRequest().body("O telefone precisa ser preenchido");
         }
 
+        // Salvar cliente
         HttpStatus status = barberError.equals("/cadastro") ? HttpStatus.CREATED : HttpStatus.OK;
         return new ResponseEntity<>(clientRepository.save(clienteCadastro), status);
     }
@@ -46,14 +43,31 @@ public class ClientService implements IClientService {  // Implementando a inter
 
     @Override
     public ClientEntity update(ClientEntity entity) {
-        return null;
+        // Verificar se o cliente existe
+        ClientEntity existingClient = clientQueryService.findById(entity.getId());
+
+        // Verificar duplicidade de e-mail e telefone
+        clientQueryService.verifyEmail(entity.getId(), entity.getEmail());
+        clientQueryService.verifyPhone(entity.getId(), entity.getPhone());
+
+        // Atualizar os dados
+        existingClient.setName(entity.getName());
+        existingClient.setEmail(entity.getEmail());
+        existingClient.setPhone(entity.getPhone());
+
+        // Salvar as alterações
+        return clientRepository.save(existingClient);
     }
 
     @Override
     public void delete(long id) {
-
+        // Verificar se o cliente existe antes de excluir
+        clientQueryService.findById(id);
+        clientRepository.deleteById(id);
     }
-    public Iterable<ClientEntity> listar(){
+
+    @Override
+    public Iterable<ClientEntity> listar() {
         return clientRepository.findAll();
     }
 }

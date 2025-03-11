@@ -13,4 +13,6 @@ public interface IClientService {
     ClientEntity update(final ClientEntity entity);
 
     void delete(final long id);
+
+    Iterable<ClientEntity> listar();
 }
