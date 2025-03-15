@@ -2,7 +2,7 @@
 
 Este repositório corresponde ao Desafio #04 da [Bootcamp Decola Tech 2025](https://www.dio.me/bootcamp/decola-tech-2025) para fornecer instruções sobre como criar um aplicativo Full-Stack para agendamentos em barbearias, utilizando Java no backend e Angular no frontend. O sistema permitirá o cadastro de clientes, agendamento de horários e gerenciamento de serviços.
 
-> ⚠️ **Nota:** esse é o repositório backend do projeto, para o frontend clique em [barber-shop-ui](https://github.com/ItaloRochaj/barber-shop-ui)
+> ⚠️ **Nota:** esse é o repositório backend do projeto, para o frontend clique em [barber-shop-ui](https://github.com/ItaloRochaj/barber-shop-ui)  
 > ⚠️ **Nota:** projetos originais da DIO - [Backend](https://github.com/digitalinnovationone/barber-shop-api) e [Frontend](https://github.com/digitalinnovationone/barber-shop-ui).
 
 ### Índice
