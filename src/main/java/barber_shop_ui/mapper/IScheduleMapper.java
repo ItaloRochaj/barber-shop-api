@@ -35,7 +35,3 @@ public interface IScheduleMapper {
     @Mapping(target = "day", expression = "java(entity.getStartAt().getDayOfMonth())")
     ClientScheduleAppointmentResponse toClientMonthResponse(final ScheduleEntity entity);
 }
-
-
-
-

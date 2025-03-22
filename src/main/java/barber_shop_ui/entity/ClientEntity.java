@@ -53,5 +53,8 @@ public class ClientEntity {
     public int hashCode() {
         return Objects.hash(id, name, email, phone);
     }
-}
 
+    public String getNome() {
+        return name;
+    }
+}

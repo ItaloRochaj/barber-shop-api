@@ -9,6 +9,7 @@ import barber_shop_ui.controller.response.UpdateClientResponse;
 import barber_shop_ui.entity.ClientEntity;
 import barber_shop_ui.mapper.IClientMapper;
 import barber_shop_ui.service.IClientService;
+import barber_shop_ui.service.impl.ClientPdfExportService;
 import barber_shop_ui.service.impl.ClientService;
 import barber_shop_ui.service.query.IClientQueryService;
 import jakarta.validation.Valid;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.CREATED;
@@ -84,6 +86,22 @@ public class ClientController {
             // Log para rastrear possíveis erros ao listar clientes
             System.err.println("Erro ao listar clientes: " + e.getMessage());
             throw new RuntimeException("Erro ao listar clientes.");
+        }
+    }
+
+    @GetMapping("/export/pdf")
+    public ResponseEntity<byte[]> exportClientsPdf() {
+        try {
+            List<ClientEntity> clients = (List<ClientEntity>) serviceShop.listar();
+            byte[] pdf = ClientPdfExportService.exportToPdf(clients);
+
+            return ResponseEntity.ok()
+                    .header("Content-Disposition", "attachment; filename=clientes.pdf")
+                    .contentType(org.springframework.http.MediaType.APPLICATION_PDF)
+                    .body(pdf);
+
+        } catch (IOException e) {
+            return ResponseEntity.internalServerError().build();
         }
     }
 }

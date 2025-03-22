@@ -31,12 +31,13 @@ repositories {
 var mapStructVersion = "1.6.3"
 
 dependencies {
+	implementation ("com.itextpdf:itext7-core:7.2.5")
+	implementation ("com.itextpdf:layout:7.2.5")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.flywaydb:flyway-core:9.22.3")
 	implementation("org.flywaydb:flyway-mysql:9.22.3")
-
 	runtimeOnly("mysql:mysql-connector-java:8.0.33")
 	implementation("org.mapstruct:mapstruct:$mapStructVersion")
 
@@ -92,6 +93,6 @@ tasks.register("generateFlywayMigrationFile") {
 
 flyway {
 	url = "jdbc:mysql://localhost:3306/barber_shop?serverTimezone=UTC" // Ajuste para MySQL
-	user = "italo"
-	password = "japa@20"
+	user = "italo_rocha"
+	password = "SenhaForte@2024"
 }

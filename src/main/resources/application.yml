@@ -2,11 +2,14 @@ spring:
   application:
     name: barber-shop-api
   datasource:
-    url: jdbc:mysql://localhost:3306/barber_shop?serverTimezone=UTC
-    username: italo
-    password: "japa@20"
+    url: jdbc:mysql://localhost:3306/api_shop?serverTimezone=UTC
+    username: italo_rocha
+    password: "SenhaForte@2024"
   jpa:
-    hibernate:
-      ddl-auto: validate
-      flyway:
-        enabled: false
+  hibernate:
+    ddl-auto: update
+  database-platform: org.hibernate.dialect.MySQLDialect
+  logging:
+    level:
+      org.hibernate.SQL: DEBUG
+      org.hibernate.type.descriptor.sql.BasicBinder: TRACE
